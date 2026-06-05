@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PedaCuatrero — Fase 1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Space+Grotesk:wght=400;600&family=Syne:wght=800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-deep: #060409;
+            --purple-neon: #7b2cbf;
+            --blue-neon: #0055ff;
+            --gold-bright: #d4af37;
+            --text-main: #f3eff7;
+            --text-muted: #7e758a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-image: 
+                radial-gradient(at 0% 15%, rgba(123, 44, 191, 0.25) 0px, transparent 40%),
+                radial-gradient(at 100% 85%, rgba(0, 85, 250, 0.2) 0px, transparent 45%);
+        }
+
+        /* --- DETALLES VANDALIZADOS DE FONDO --- */
+        .vandal-bg-text {
+            position: absolute;
+            font-family: 'Permanent Marker', cursive;
+            color: rgba(212, 175, 55, 0.015);
+            font-size: 18vw;
+            line-height: 0.8;
+            pointer-events: none;
+            user-select: none;
+            z-index: 0;
+            text-transform: uppercase;
+            transform: rotate(-8deg);
+        }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .main-container {
+            text-align: center;
+            z-index: 10;
+            padding: 20px;
+            max-width: 90%;
+        }
+
+        .phase-tag {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 1rem;
+            letter-spacing: 4px;
+            color: var(--purple-neon);
+            margin-bottom: 20px;
+            border: 1px solid rgba(123, 44, 191, 0.4);
+            padding: 6px 20px;
+            display: inline-block;
+            background: rgba(18, 1, 36, 0.4);
+            backdrop-filter: blur(5px);
+        }
+
+        .title-container {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .main-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 7.5rem;
+            line-height: 0.85;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #fff 30%, var(--gold-bright) 70%, var(--blue-neon) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+        }
+
+        .lema-graffiti {
+            position: absolute;
+            font-family: 'Permanent Marker', cursive;
+            font-size: 4.5rem;
+            color: rgba(220, 20, 60, 0.95); /* Rojo carmesí vandal */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-7deg);
+            text-shadow: 3px 3px 0 #000;
+            pointer-events: none;
+            width: 130%;
+            letter-spacing: 2px;
+        }
+
+        /* --- CONTADOR DE TIEMPO --- */
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .countdown-box {
+            background: rgba(18, 1, 36, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 15px 25px;
+            min-width: 100px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .countdown-num {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-main);
+            display: block;
+            line-height: 1;
+        }
+
+        .countdown-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* --- BOTÓN DE ACCESO --- */
+        .btn-vandal {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            color: #fff;
+            background: transparent;
+            border: 2px solid var(--gold-bright);
+            padding: 22px 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(123, 44, 191, 0.2);
+        }
+
+        .btn-vandal:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(214, 175, 55, 0.25);
+            background: var(--gold-bright);
+            color: #000;
+        }
+
+        /* --- MARQUESINA / TICKER CONSTANTE --- */
+        .ticket-ticker {
+            background: linear-gradient(90deg, #68500c, #947214);
+            color: #000;
+            padding: 14px 0;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            letter-spacing: 2px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 99;
+            overflow: hidden;
+            white-space: nowrap;
+            border-top: 2px solid var(--gold-bright);
+        }
+
+        .ticker-wrap {
+            display: inline-block;
+            animation: ticker 25s linear infinite;
+        }
+
+        .ticker-item {
+            display: inline-block;
+            padding: 0 40px;
+        }
+
+        .ticker-highlight {
+            font-family: 'Permanent Marker', cursive;
+            color: #fff;
+            background: #000;
+            padding: 3px 12px;
+            margin-left: 8px;
+            box-shadow: 2px 2px 0px var(--purple-neon);
+        }
+
+        @keyframes ticker {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-50%, 0, 0); }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .main-title { font-size: 3.5rem; }
+            .lema-graffiti { font-size: 2rem; width: 110%; }
+            .countdown-num { font-size: 2rem; }
+            .countdown-box { min-width: 70px; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="vandal-bg-text" style="top: 10%; left: -5%;">PREVENTA</div>
+    <div class="vandal-bg-text" style="top: 60%; right: -5%; color: rgba(123, 44, 191, 0.02);">150</div>
+
+    <div class="main-container">
+        <div class="phase-tag">Fase 1 : Preventa</div>
+        
+        <div class="title-container">
+            <h1 class="main-title">PEDACUATRERA</h1>
+            <div class="lema-graffiti">#estavapordoñasoco</div>
+        </div>
+
+        <!-- CONTADOR DE TIEMPO (RELOJ) -->
+        <div class="countdown-container">
+            <div class="countdown-box">
+                <span class="countdown-num" id="days">24</span>
+                <span class="countdown-label">Días</span>
+            </div>
+            <div class="countdown-box">
+                <span class="countdown-num" id="hours">00</span>
+                <span class="countdown-label">Horas</span>
+            </div>
+            <div class="countdown-box">
+                <span class="countdown-num" id="minutes">00</span>
+                <span class="countdown-label">Min</span>
+            </div>
+            <div class="countdown-box">
+                <span class="countdown-num" id="seconds">00</span>
+                <span class="countdown-label">Seg</span>
+            </div>
+        </div>
+
+        <a href="#" class="btn-vandal" onclick="alert('Accediendo a pasarela encriptada...');">Asegurar Acceso</a>
+    </div>
+
+    <!-- MARQUESINA SIN FIN -->
+    <div class="ticket-ticker">
+        <div class="ticker-wrap">
+            <div class="ticker-item">SÓLO 150 BOLETOS <span class="ticker-highlight">PRECIO: $150</span></div>
+            <div class="ticker-item">• FASE 1 ACTIVA</div>
+            <div class="ticker-item">• #ESTAVAPORDOÑASOCO</div>
+            <div class="ticker-item">• DISPONIBLES: <span id="ticket-count">150</span> / 150</div>
+            
+            <!-- Repetición para Loop infinito fluido -->
+            <div class="ticker-item">SÓLO 150 BOLETOS <span class="ticker-highlight">PRECIO: $150</span></div>
+            <div class="ticker-item">• FASE 1 ACTIVA</div>
+            <div class="ticker-item">• #ESTAVAPORDOÑASOCO</div>
+            <div class="ticker-item">• DISPONIBLES: <span id="ticket-count-loop">150</span> / 150</div>
+        </div>
+    </div>
+
+    <script>
+        // Configura el contador dinámico para que expire exactamente en 24 días desde este instante
+        const targetDate = new Date().getTime() + (24 * 24 * 60 * 60 * 1000);
+
+        const countdown = () => {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference < 0) {
+                document.querySelector(".countdown-container").innerHTML = "<span class='phase-tag'>TIEMPO AGOTADO</span>";
+                return;
+            }
+
+            const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((difference % (1000 * 60)) / 1000);
+
+            document.getElementById("days").textContent = d < 10 ? "0" + d : d;
+            document.getElementById("hours").textContent = h < 10 ? "0" + h : h;
+            document.getElementById("minutes").textContent = m < 10 ? "0" + m : m;
+            document.getElementById("seconds").textContent = s < 10 ? "0" + s : s;
+        };
+
+        setInterval(countdown, 1000);
+        countdown();
+
+        // Simulación orgánica de venta de boletos (Baja levemente para generar FOMO)
+        let currentTickets = 150;
+        const updateTickets = () => {
+            if (currentTickets > 139) {
+                currentTickets -= Math.floor(Math.random() * 2) + 1;
+                document.getElementById("ticket-count").textContent = currentTickets;
+                document.getElementById("ticket-count-loop").textContent = currentTickets;
+            }
+        };
+        setTimeout(updateTickets, 4000);
+        setInterval(updateTickets, 16000);
+    </script>
+</body>
+</html>
